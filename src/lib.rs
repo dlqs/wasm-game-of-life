@@ -108,12 +108,19 @@ impl Universe {
         self.width = width;
         self.cells = (0..self.width * self.height).map(|_i| Cell::Dead).collect();
     }
+
     pub fn set_height(&mut self, height: u32) {
         self.height = height;
         self.cells = (0..self.width * self.height).map(|_i| Cell::Dead).collect();
     }
+
+    pub fn toggle_cell(&mut self, row: u32, column: u32) {
+        let idx = self.get_index(row, column);
+        self.cells[idx].toggle();
+    }
 }
 
+// Note no bindgen here
 impl Universe {
     pub fn get_cells(&self) -> &[Cell] {
         &self.cells
@@ -136,6 +143,15 @@ impl fmt::Display for Universe {
             write!(f, "\n")?;
         }
         Ok(())
+    }
+}
+
+impl Cell {
+    fn toggle(&mut self) {
+        *self = match *self {
+            Cell::Dead => Cell::Alive,
+            Cell::Alive => Cell::Dead,
+        };
     }
 }
 
