@@ -3,8 +3,26 @@ extern crate js_sys;
 extern crate web_sys;
 
 use wasm_bindgen::prelude::*;
+use web_sys::console;
 use js_sys::Math;
 use std::fmt;
+
+pub struct Timer<'a> {
+    name: &'a str
+}
+
+impl<'a> Timer<'a> {
+    pub fn new(name: &'a str) -> Timer<'a> {
+        console::time_with_label(name);
+        Timer { name }
+    }
+}
+
+impl<'a> Drop for Timer<'a> {
+    fn drop (&mut self) {
+        console::time_end_with_label(self.name);
+    }
+}
 
 macro_rules! log {
     ( $( $t:tt )* ) => {
@@ -49,6 +67,7 @@ impl Universe {
     }
 
     pub fn tick(&mut self) {
+        let _timer = Timer::new("Universe::tick");
         let mut next_cells = self.cells.clone();
         for row in 0..self.height {
             for col in 0..self.height {
