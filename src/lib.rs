@@ -88,9 +88,9 @@ impl Universe {
     }
 
     pub fn new() -> Universe {
-        let width = 64;
+        let width = 256;
         log!("waddup bitches");
-        let height = 64;
+        let height = 256;
         let cells = (0..width * height)
             .map(|_i| {
                 if Math::random() > 0.5 {
